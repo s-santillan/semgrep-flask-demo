@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from marshmallow import Schema, fields, ValidationError
+import logging
 
 app = Flask(__name__)
 
@@ -26,3 +27,11 @@ data_schema = DataSchema()
 def reflect():
     data = data_schema.load(data=request.get_json())
     return jsonify(data["data"])
+
+
+@app.route('/logs', methods=['POST'])
+def log():
+    logs = request.get_json()["lines"]
+    for l in logs:
+        logging.info(l)
+    return jsonify({"status": "ok"})
