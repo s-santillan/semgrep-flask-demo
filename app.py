@@ -18,6 +18,10 @@ class DataSchema(Schema):
     data = fields.Str(required=True)
 
 
+class LogSchema(Schema):
+    lines = fields.List(fields.Str, required=True)
+
+
 data_schema = DataSchema()
 
 # --- ROUTES ---
@@ -31,7 +35,7 @@ def reflect():
 
 @app.route('/logs', methods=['POST'])
 def log():
-    logs = request.get_json()["lines"]
-    for l in logs:
+    logs = LogSchema().load(request.get_json())
+    for l in logs["lines"]:
         logging.info(l)
     return jsonify({"status": "ok"})
