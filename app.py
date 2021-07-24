@@ -25,4 +25,4 @@ data_schema = DataSchema()
 @app.route('/', methods=['POST'])
 def reflect():
     data = data_schema.load(data=request.get_json())
-    return jsonify(data)
+    return jsonify(data["data"])
